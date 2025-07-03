@@ -1,16 +1,16 @@
 # FinSights
 
-> Plataforma de inteligência financeira para análise e visualização de dados financeiros.
+Plataforma de inteligência financeira para análise e visualização de dados financeiros.
 
 ## Pré-requisitos
 
-- [Docker](https://www.docker.com/) instalado na máquina
+- [Docker](https://www.docker.com/) instalado na máquina.
 
 ## Rodando o projeto com Docker Compose
 
 1. Clone o repositório:
    ```bash
-   git clone <url-do-repositorio>
+   git clone https://github.com/mtzdantas/finsights-front.git
    cd finsights
    ```
 
