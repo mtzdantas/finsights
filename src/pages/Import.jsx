@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import CardStatus from '../components/CardStatus';
-import {FileText, CircleCheckBig, CircleX, Download, Save, Trash} from 'lucide-react';
+import {FileText, CircleCheckBig, CircleX, Download, Save, Trash, FolderCheck} from 'lucide-react';
 import Upload from '../components/Upload';
 
 export default function Import() {
@@ -13,10 +13,15 @@ export default function Import() {
 
   const salvarArquivo = () => {
     if (fileInfo) {
-      setArquivosSalvos((prev) => [...prev, fileInfo]);
+      const status = fileInfo.data.length > 0 ? 'ok' : 'erro';
+      setArquivosSalvos((prev) => [...prev, { ...fileInfo, status }]);
       setFileInfo(null);
     }
-  };
+  }; 
+
+  const total = arquivosSalvos.length;
+  const concluidos = arquivosSalvos.filter(a => a.status === 'ok').length;
+  const erros = arquivosSalvos.filter(a => a.status === 'erro').length;
 
   const removerArquivo = (index) => {
     setArquivosSalvos((prev) => prev.filter((_, i) => i !== index));
@@ -32,19 +37,19 @@ export default function Import() {
       <div className='grid grid-cols-3 lg:grid-cols-3 gap-2 mb-6'>
         <CardStatus
           titulo="Upload de arquivos"
-          quantidade="201"
+          quantidade={total.toString()}
           icon={<FileText className='text-blue-500'/>}
           background='bg-blue-50'
         />
         <CardStatus
           titulo="Concluídos"
-          quantidade="195"
+          quantidade={concluidos.toString()}
           icon={<CircleCheckBig className='text-emerald-500'/>}
           background='bg-emerald-50'
         />
         <CardStatus
           titulo="Falhas no upload"
-          quantidade="6"
+          quantidade={erros.toString()}
           icon={<CircleX className='text-red-500'/>}
           background='bg-red-50'
         />
@@ -70,7 +75,10 @@ export default function Import() {
           <Upload onFileParsed={handleFileParsed}/>
         </div>
         <div className='flex-1 bg-white/80 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300'>
-          <p className="text-2xl font-semibold text-[#243043] mb-4">Arquivos Salvos</p>
+          <div className='flex items-center gap-2 mb-6'>
+            <FolderCheck/>
+            <p className="text-2xl font-semibold text-[#243043]">Arquivos Salvos</p>
+          </div>
           {arquivosSalvos.length === 0 ? (
             <p className="text-gray-500">Nenhum arquivo salvo ainda.</p>
           ) : (
@@ -81,7 +89,14 @@ export default function Import() {
                   className="flex justify-between border border-gray-200 rounded-lg p-3 bg-white shadow-sm"
                 >
                   <div>
-                    <div className="font-semibold text-[#243043]">{arquivo.fileName}</div>
+                    <div className="flex items-center gap-2 font-semibold text-[#243043]">
+                      {arquivo.fileName}
+                      {arquivo.status === 'ok' ? (
+                        <CircleCheckBig size={16} className="text-emerald-500" title="Importado com sucesso"/>
+                      ) : (
+                        <CircleX size={16} className="text-red-500" title="Erro na importação"/>
+                      )}
+                    </div>
                     <div className="text-gray-600 text-xs">
                       {arquivo.data.length} linha{arquivo.data.length > 1 ? 's' : ''} • {arquivo.headers.length} coluna{arquivo.headers.length > 1 ? 's' : ''}
                     </div>
