@@ -35,7 +35,7 @@ export default function Home() {
         {/* Image */}
       </section>
 
-      <section id="services" className="flex flex-col h-screen bg-slate-100 p-24 text-center items-center justify-center text-[#243043]">
+      <section id="services" className="flex flex-col bg-slate-100 p-24 text-center items-center justify-center text-[#243043]">
         <h1 className="text-5xl font-bold mb-4">Recursos que fazem a diferença</h1>
         <p className="text-xl mb-20">
           Tudo que você precisa para uma análise financeira completa e profissional.
