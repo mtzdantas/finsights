@@ -1,13 +1,10 @@
 import { useState, useRef } from 'react';
 import Papa from 'papaparse';
 import { useToast } from '../hooks/useToast';
-import {FileChartColumn, Paperclip} from 'lucide-react';
+import {Paperclip} from 'lucide-react';
 
 const Upload = ({ onFileParsed }) => {
   const { addToast } = useToast();
-  const [fileName, setFileName] = useState('');
-  const [parsedData, setParsedData] = useState([]);
-  const [headers, setHeaders] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef();
 
@@ -19,22 +16,14 @@ const Upload = ({ onFileParsed }) => {
       return;
     }
 
-    setFileName(file.name);
-
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: (results) => {
-        const parsed = results.data;
-        const fields = results.meta.fields || [];
-
-        setParsedData(parsed);
-        setHeaders(fields);
-
+      complete: (results) => {   
         onFileParsed({
           fileName: file.name,
-          data: parsed,
-          headers: fields,
+          data: results.data,
+          headers: results.meta.fields || [],
         });
       },
       error: (err) => {
@@ -78,7 +67,7 @@ const Upload = ({ onFileParsed }) => {
             isDragging ? 'bg-blue-100' : 'bg-gray-100'
           }`}
         >
-          <FileChartColumn 
+          <Paperclip
             size={30} 
             className={`transition-colors duration-300 ${
               isDragging ? 'text-blue-600' : 'text-[#243043]'
@@ -100,20 +89,6 @@ const Upload = ({ onFileParsed }) => {
         >
           ou clique para selecionar
         </span>
-
-        {fileName && parsedData.length > 0 && (
-          <div className="mt-6 flex items-center gap-4 border border-gray-200 bg-white p-4 rounded-lg shadow-sm max-w-md mx-auto">
-            <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
-              <Paperclip size={24} />
-            </div>
-            <div className="text-sm text-[#243043]">
-              <p className="font-semibold">{fileName}</p>
-              <p className="text-xs text-gray-600">
-                {parsedData.length} linha{parsedData.length > 1 ? 's' : ''} • {headers.length} coluna{headers.length > 1 ? 's' : ''}
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

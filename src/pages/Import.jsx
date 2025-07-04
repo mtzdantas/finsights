@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import CardStatus from '../components/CardStatus';
 import {FileText, CircleCheckBig, CircleX, Download, Save, Trash, FolderCheck} from 'lucide-react';
+import { useToast } from '../hooks/useToast';
 import Upload from '../components/Upload';
 
 export default function Import() {
+  const { addToast } = useToast();
   const [fileInfo, setFileInfo] = useState(null); 
   const [arquivosSalvos, setArquivosSalvos] = useState([]);
 
@@ -16,6 +18,7 @@ export default function Import() {
       const status = fileInfo.data.length > 0 ? 'ok' : 'erro';
       setArquivosSalvos((prev) => [...prev, { ...fileInfo, status }]);
       setFileInfo(null);
+      addToast('success', 'Arquivo CSV salvo com sucesso!');
     }
   }; 
 
@@ -63,13 +66,21 @@ export default function Import() {
               <p className='text-2xl font-semibold text-[#243043]'>Novo Upload</p>
             </div>
             {fileInfo && (
-              <button
-                onClick={salvarArquivo}
-                title="Salvar arquivo"
-                className="flex items-center font-semibold gap-1 p-2 text-sm bg-emerald-600 text-white rounded hover:bg-emerald-700 transition"
-              >
-                <Save size={20} />
-              </button>
+              <div className="flex items-center gap-2">
+                <span 
+                  className="text-sm font-medium text-emerald-600 truncate max-w-[150px] whitespace-nowrap overflow-hidden text-ellipsis"
+                  title={fileInfo.fileName}
+                >
+                  {fileInfo.fileName}
+                </span>
+                <button
+                  onClick={salvarArquivo}
+                  title="Salvar arquivo"
+                  className="flex items-center font-semibold gap-1 p-2 text-sm bg-emerald-600 text-white rounded hover:bg-emerald-700 transition"
+                >
+                  <Save size={20} />
+                </button>
+              </div>
             )}
           </div>
           <Upload onFileParsed={handleFileParsed}/>
