@@ -10,9 +10,9 @@ import Import from "./pages/Import";
 function App() {
   return (
     <ToastProvider>
-      <div className="flex">
+      <div className="flex h-screen">
         <Sidebar />
-        <main className="flex-1">
+        <main className="flex-1 overflow-y-auto">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
