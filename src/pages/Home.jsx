@@ -35,7 +35,7 @@ export default function Home() {
         {/* Image */}
       </section>
 
-      <section id="services" className="flex flex-col bg-slate-100 p-24 text-center items-center justify-center text-[#243043]">
+      <section id="services" className="flex flex-col bg-slate-100 px-24 h-screen text-center items-center justify-center text-[#243043]">
         <h1 className="text-5xl font-bold mb-4">Recursos que fazem a diferença</h1>
         <p className="text-xl mb-20">
           Tudo que você precisa para uma análise financeira completa e profissional.
@@ -77,16 +77,19 @@ export default function Home() {
           <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
         </NavLink>
       </section>
-      <section id="team" className="h-screen bg-white p-24 shadow-2xl">
-        <h1 className="w-fit pb-2 text-5xl font-bold text-[#243043]">Conheça nossa equipe</h1>
-        <p className="w-fit text-xl font-semibold pb-2 mb-18 bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
-          Profissionais experientes dedicados a transformar<br/>o futuro das finanças corporativas.
-        </p>
+      <section id="team" className="flex flex-col justify-between h-screen">
+        <div className="flex flex-col bg-white p-24 text-[#243043]">
+          <h1 className="w-fit pb-2 text-5xl font-bold text-[#243043]">Conheça nossa equipe</h1>
+          <p className="w-fit text-xl font-semibold pb-2 mb-18 bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
+            Profissionais experientes dedicados a transformar<br/>o futuro das finanças corporativas.
+          </p>
+          {/* <EquipeCarrossel /> */}
+          a
+        </div>
+        <footer className="w-full h-16 bg-gradient-to-r from-blue-600 to-emerald-600 text-white flex items-center justify-center text-sm">
+          &copy; {new Date().getFullYear()} FinSight. Todos os direitos reservados.
+        </footer>
       </section>
-      <footer className="h-16 bg-gradient-to-r from-blue-600 to-emerald-600 text-white flex items-center justify-center text-sm">
-        &copy; {new Date().getFullYear()} FinSight. Todos os direitos reservados.
-      </footer>
-      {/* bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 */}
     </>
   );
 }
