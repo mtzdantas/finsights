@@ -74,7 +74,7 @@ export default function Home() {
 
           <CardService
             titulo="Inteligência Artificial"
-            descricao="Aproveite o poder da IA para prever tendências, identificar padrões e automatizar análises financeiras. Obtenha recomendações inteligentes que potencializam a tomada de decisões estratégicas."
+            descricao="Aproveite o poder da IA para identificar padrões e automatizar análises financeiras. Obtenha recomendações inteligentes que potencializam a tomada de decisões estratégicas."
             icon={<Brain />}
           />
 
@@ -104,7 +104,7 @@ export default function Home() {
 
       <section id="team" className="flex flex-col h-screen bg-white text-[#243043] justify-center p-24">
         <h1 className="w-fit pb-2 text-4xl md:text-5xl font-bold text-[#243043]">
-          Conheça nossa equipe
+          Conheça nossa equipe 
         </h1>
         <p className="w-fit text-lg md:text-xl font-semibold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent mb-24">
           Profissionais experientes dedicados a transformar<br />o futuro das finanças corporativas.

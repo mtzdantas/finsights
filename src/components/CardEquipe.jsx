@@ -8,7 +8,7 @@ const CardEquipe = ({ foto, nome, funcao, bio, redes }) => {
   const restanteNome = nome.split(" ").slice(1).join(" ");
 
   return (
-    <div className="w-70 max-w-xs h-[400px] perspective">
+    <div className="w-70 max-w-xs h-[350px] perspective">
       <div
         className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
           virado ? "rotate-y-180" : ""
