@@ -10,7 +10,7 @@ Plataforma de inteligência financeira para análise e visualização de dados f
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/mtzdantas/finsights-front.git
+   git clone https://github.com/mtzdantas/finsights.git
    cd finsights
    ```
 
