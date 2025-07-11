@@ -1,12 +1,29 @@
 services:
-  finsights:
-    build: .
-    image: finsights
-    container_name: finsights
+  finsights-frontend:
+    build:
+      context: ./frontend
+    image: finsights-frontend
+    container_name: finsights-frontend
     ports:
       - "5173:5173"
     volumes:
-      - .:/app
+      - ./frontend:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
+    command: ["npm", "run", "dev", "--", "--host"]
+    depends_on:
+      - finsights-backend
+
+  finsights-backend:
+    build:
+      context: ./backend
+    image: finsights-backend
+    container_name: finsights-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - FLASK_ENV=development
+    command: ["python", "run.py"]
