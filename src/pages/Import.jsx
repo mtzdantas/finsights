@@ -13,12 +13,44 @@ export default function Import() {
     setFileInfo(info);
   };
 
-  const salvarArquivo = () => {
-    if (fileInfo) {
-      const status = fileInfo.data.length > 0 ? 'ok' : 'erro';
-      setArquivosSalvos((prev) => [...prev, { ...fileInfo, status }]);
+  const salvarArquivo = async () => {
+    if (!fileInfo || !fileInfo.data) return;
+    try {
+      const usuario_id = 'UUID-DO-USUÁRIO'; // Pegue isso da sessão atual do Supabase
+
+      const dadosParaEnviar = fileInfo.data.map((linha) => ({
+        ...linha,
+        usuario_id,
+      }));
+      
+      const API_URL = import.meta.env.VITE_API_URL;
+
+      const response = await fetch(`${API_URL}/api/extrato`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dadosParaEnviar),
+      });
+
+      if (response.ok) {
+        setArquivosSalvos((prev) => [
+          ...prev,
+          { ...fileInfo, status: 'ok' }
+        ]);
+        setFileInfo(null);
+        addToast('success', 'Arquivo CSV salvo com sucesso!');
+      } else {
+        throw new Error('Erro no envio para o backend');
+      }
+    } catch (error) {
+      console.error(error);
+      setArquivosSalvos((prev) => [
+        ...prev,
+        { ...fileInfo, status: 'erro' }
+      ]);
       setFileInfo(null);
-      addToast('success', 'Arquivo CSV salvo com sucesso!');
+      addToast('error', 'Erro ao salvar o arquivo CSV!');
     }
   }; 
 
@@ -93,36 +125,38 @@ export default function Import() {
           {arquivosSalvos.length === 0 ? (
             <p className="text-gray-500">Nenhum arquivo salvo ainda.</p>
           ) : (
-            <ul className="space-y-2 text-sm">
-              {arquivosSalvos.map((arquivo, idx) => (
-                <li 
+            <div className='max-h-64 overflow-y-auto pr-1'>
+              <ul className="space-y-2 text-sm">
+                {arquivosSalvos.map((arquivo, idx) => (
+                  <li 
                   key={idx} 
                   className="flex justify-between border border-gray-200 rounded-lg p-3 bg-white shadow-sm"
-                >
-                  <div>
-                    <div className="flex items-center gap-2 font-semibold text-[#243043]">
-                      {arquivo.fileName}
-                      {arquivo.status === 'ok' ? (
-                        <CircleCheckBig size={16} className="text-emerald-500" title="Importado com sucesso"/>
-                      ) : (
-                        <CircleX size={16} className="text-red-500" title="Erro na importação"/>
-                      )}
-                    </div>
-                    <div className="text-gray-600 text-xs">
-                      {arquivo.data.length} linha{arquivo.data.length > 1 ? 's' : ''} • {arquivo.headers.length} coluna{arquivo.headers.length > 1 ? 's' : ''}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => removerArquivo(idx)}
-                    title="Remover arquivo"
-                    className="p-2 rounded-full text-red-500 hover:bg-red-100 transition"
                   >
-                    <Trash size={18} />
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    <div>
+                      <div className="flex items-center gap-2 font-semibold text-[#243043]">
+                        {arquivo.fileName}
+                        {arquivo.status === 'ok' ? (
+                          <CircleCheckBig size={16} className="text-emerald-500" title="Importado com sucesso"/>
+                        ) : (
+                          <CircleX size={16} className="text-red-500" title="Erro na importação"/>
+                        )}
+                      </div>
+                      <div className="text-gray-600 text-xs">
+                        {arquivo.data.length} linha{arquivo.data.length > 1 ? 's' : ''} • {arquivo.headers.length} coluna{arquivo.headers.length > 1 ? 's' : ''}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => removerArquivo(idx)}
+                      title="Remover arquivo"
+                      className="p-2 rounded-full text-red-500 hover:bg-red-100 transition"
+                      >
+                      <Trash size={18} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </div>

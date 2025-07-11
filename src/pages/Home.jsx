@@ -144,7 +144,7 @@ export default function Home() {
           <CardEquipe
             foto={fabricioFoto}
             nome="Fabrício Vale"
-            funcao="Tech Leader"
+            funcao="Tech Lead"
             bio="Possui Graduação (2001), Mestrado (2005) e Doutorado (2018) em Ciência da Computação pela Universidade Federal de Campina Grande. Atualmente é professor da Universidade Federal do Rio Grande do Norte. Tem experiência profissional na área de desenvolvimento de software, tendo trabalhado para grandes empresas no exterior e no Brasil, e com pesquisa em computação aplicada à Educação, com ênfase em programação para dispositivos móveis. Atua também como músico, compositor, e roteirista/produtor/diretor audiovisual, integrando tecnologias e inteligência artificial fora do âmbito da computação em si."
             redes={{
               instagram: "https://instagram.com/fabriciovale79",
