@@ -1,4 +1,9 @@
 from flask import Blueprint, request, jsonify
+from . import db
+from .models import Extrato
+from .services import limpar_dados
+import uuid
+from datetime import datetime
 
 main = Blueprint('main', __name__)
 
@@ -9,13 +14,25 @@ def home():
 @main.route("/api/extrato", methods=["POST"])
 def receber_extrato():
   try:
-    dados = request.get_json()
-    print("Dados recebidos do frontend:")
-    for linha in dados:
-      print(linha)
+    dados_brutos = request.get_json()
+    dados_limpos = limpar_dados(dados_brutos)
 
-    return jsonify({"status": "sucesso", "mensagem": "Dados recebidos com sucesso!"}), 200
+    extratos = []
+    for linha in dados_limpos:
+      extrato = Extrato(
+        data=datetime.strptime(linha['data'], '%Y-%m-%d').date(),
+        tipo_lancamento=linha['tipo_lancamento'],
+        valor=linha['valor'],
+        doc_destinatario=linha.get('doc_destinatario'),
+        nome_destinatario=linha.get('nome_destinatario'),
+        usuario_id=uuid.UUID(linha['usuario_id'])
+      )
+      extratos.append(extrato)
+    
+    db.session.add_all(extratos)
+    db.session.commit()
+
+    return jsonify({"status": "sucesso", "mensagem": "Dados processados com sucesso!"}), 200
 
   except Exception as e:
-    print("❌ Erro ao processar os dados:", e)
-    return jsonify({"status": "erro", "mensagem": "Erro ao receber os dados"}), 400
+    return jsonify({"status": "erro", "mensagem": "Erro ao processar os dados"}), 400
