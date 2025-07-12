@@ -1,5 +1,4 @@
 from . import db
-from sqlalchemy.dialects.postgresql import UUID
 from datetime import date
 
 class Extrato(db.Model):
@@ -11,4 +10,4 @@ class Extrato(db.Model):
     valor = db.Column(db.Numeric(10, 2), nullable=False)
     doc_destinatario = db.Column(db.String(20))
     nome_destinatario = db.Column(db.Text)
-    usuario_id = db.Column(UUID(as_uuid=True), nullable=False)
+    usuario_id = db.Column(db.String(80), nullable=False)
