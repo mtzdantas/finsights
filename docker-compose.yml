@@ -26,4 +26,6 @@ services:
       - ./backend:/app
     environment:
       - FLASK_ENV=development
+    env_file:
+      - ./backend/.env
     command: ["python", "run.py"]
