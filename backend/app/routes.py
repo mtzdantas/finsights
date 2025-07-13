@@ -20,12 +20,12 @@ def receber_extrato():
     extratos = []
     for linha in dados_limpos:
       extrato = Extrato(
-        data=datetime.strptime(linha['data'], '%Y-%m-%d').date(),
+        data=linha['data'],
         tipo_lancamento=linha['tipo_lancamento'],
         valor=linha['valor'],
         doc_destinatario=linha.get('doc_destinatario'),
         nome_destinatario=linha.get('nome_destinatario'),
-        usuario_id=uuid.UUID(linha['usuario_id'])
+        usuario_id='f45b387a-fa8f-4b3c-81c4-c9ab898d36b9'
       )
       extratos.append(extrato)
     

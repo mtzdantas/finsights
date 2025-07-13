@@ -16,11 +16,9 @@ export default function Import() {
   const salvarArquivo = async () => {
     if (!fileInfo || !fileInfo.data) return;
     try {
-      const usuario_id = 'UUID-DO-USUÁRIO'; // Pegue isso da sessão atual do Supabase
 
       const dadosParaEnviar = fileInfo.data.map((linha) => ({
         ...linha,
-        usuario_id,
       }));
       
       const API_URL = import.meta.env.VITE_API_URL;
