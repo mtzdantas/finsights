@@ -26,7 +26,8 @@ def receber_extrato():
         valor=linha['valor'],
         doc_destinatario=linha.get('doc_destinatario'),
         nome_destinatario=linha.get('nome_destinatario'),
-        usuario_id='f45b387a-fa8f-4b3c-81c4-c9ab898d36b9'
+        usuario_id='f45b387a-fa8f-4b3c-81c4-c9ab898d36b9',
+        arquivo_id=linha.get('arquivo_id')
       )
       extratos.append(extrato)
     
@@ -37,6 +38,17 @@ def receber_extrato():
 
   except Exception as e:
     return jsonify({"status": "erro", "mensagem": "Erro ao processar os dados"}), 400
+
+@main.route("/api/extrato/<arquivo_id>", methods=["DELETE"])
+def deletar_extrato(arquivo_id):
+  try:
+    delete = Extrato.query.filter_by(arquivo_id=arquivo_id).delete()
+    db.session.commit()
+    return jsonify({"status": "sucesso", "mensagem": f"{delete} registros removidos."}), 200
+  
+  except Exception as e:
+    db.session.rollback()
+    return jsonify({"status": "erro", "mensagem": "Erro ao deletar os registros"}), 500
 
 @main.route("/api/extrato/dashboard", methods=["GET"])
 def dashboard_extratos():

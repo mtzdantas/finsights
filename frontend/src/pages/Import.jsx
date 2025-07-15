@@ -8,6 +8,7 @@ export default function Import() {
   const { addToast } = useToast();
   const [fileInfo, setFileInfo] = useState(null); 
   const [arquivosSalvos, setArquivosSalvos] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleFileParsed = (info) => {
     setFileInfo(info);
@@ -16,12 +17,10 @@ export default function Import() {
   const salvarArquivo = async () => {
     if (!fileInfo || !fileInfo.data) return;
     try {
-
       const dadosParaEnviar = fileInfo.data.map((linha) => ({
         ...linha,
+        arquivo_id: fileInfo.fileName,
       }));
-      
-      const API_URL = import.meta.env.VITE_API_URL;
 
       const response = await fetch(`${API_URL}/api/extrato`, {
         method: 'POST',
@@ -56,8 +55,19 @@ export default function Import() {
   const concluidos = arquivosSalvos.filter(a => a.status === 'ok').length;
   const erros = arquivosSalvos.filter(a => a.status === 'erro').length;
 
-  const removerArquivo = (index) => {
-    setArquivosSalvos((prev) => prev.filter((_, i) => i !== index));
+  const removerArquivo = async (index) => {
+    const arquivoId = arquivosSalvos[index].fileName;
+    try {
+      await fetch(`${API_URL}/api/extrato/${arquivoId}`, {
+        method: 'DELETE',
+      });
+
+      setArquivosSalvos((prev) => prev.filter((_, i) => i !== index));
+      addToast('success', 'Arquivo removido com sucesso!');
+    } catch (error) {
+      console.error(error);
+      addToast('error', 'Erro ao remover o arquivo.');
+    }
   };
 
   return (
