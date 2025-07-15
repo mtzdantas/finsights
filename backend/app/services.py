@@ -1,21 +1,44 @@
 # import pandas as pd
 from datetime import datetime
 from decimal import Decimal
+import re
+
+def extrair_doc_e_nome(detalhes: str) -> tuple[str, str]:
+  if not detalhes:
+    return "", ""
+
+  match = re.search(r"(\d{11,14})\s+(.+)", detalhes)
+  if match:
+    documento = match.group(1)
+    nome = match.group(2).strip()
+    return documento, nome
+    
+  return "", detalhes
 
 def normalizar_linha(linha: dict) -> dict | None:
   try:
     # Banco do Brasil - Formato 1
     if 'Lan�amento' in linha or 'Tipo Lan�amento' in linha:
-      if linha.get('Lan�amento') in ['Saldo do dia', 'Saldo Anterior', 'S A L D O']:
+      if linha.get('Lan�amento') in ['Saldo do dia', 'Saldo Anterior', 'S A L D O'] | linha.get('Lan�amento') in ['Rejeitado']:
         return None
+      
+      tipo_lancamento = linha.get('Tipo Lan�amento', '').strip()
+      if tipo_lancamento == 'Sa�da':
+        tipo_lancamento = 'Saída'
+      elif not tipo_lancamento:
+        tipo_lancamento = 'Desconhecido'
+      
+      detalhes = linha.get('Detalhes', '')
+      doc_destinatario, nome_destinatario = extrair_doc_e_nome(detalhes)
+
       return {
         'data': datetime.strptime(linha['Data'], '%d/%m/%Y').date(),
-        'tipo_lancamento': linha.get('Tipo Lan�amento', '').strip() or 'Desconhecido',
+        'tipo_lancamento': tipo_lancamento,
         'valor': Decimal(
           linha['Valor'].replace('.', '').replace(',', '.')
         ),
-        'doc_destinatario': '',
-        'nome_destinatario': linha.get('Detalhes') or '',
+        'doc_destinatario': doc_destinatario,
+        'nome_destinatario': nome_destinatario,
       }
 
     # Nubank - Formato 2
