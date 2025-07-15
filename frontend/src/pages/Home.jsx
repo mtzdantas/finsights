@@ -92,9 +92,9 @@ export default function Home() {
         </div>
 
         <NavLink
-          to={"/dashboard"}
-          key={"/dashboard"}
-          title={"Dashboard"}
+          to={"/import"}
+          key={"/import"}
+          title={"Import"}
           className="flex items-center justify-center w-md bg-gradient-to-r from-blue-500 to-emerald-500 text-white py-4 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
         >
           Comece Agora
