@@ -11,3 +11,4 @@ class Extrato(db.Model):
     doc_destinatario = db.Column(db.String(20))
     nome_destinatario = db.Column(db.Text)
     usuario_id = db.Column(db.String(80), nullable=False)
+    arquivo_id = db.Column(db.String, nullable=False)

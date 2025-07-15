@@ -19,7 +19,8 @@ def normalizar_linha(linha: dict) -> dict | None:
   try:
     # Banco do Brasil - Formato 1
     if 'Lan�amento' in linha or 'Tipo Lan�amento' in linha:
-      if linha.get('Lan�amento') in ['Saldo do dia', 'Saldo Anterior', 'S A L D O'] | linha.get('Lan�amento') in ['Rejeitado']:
+
+      if linha.get('Lan�amento') in ['Saldo do dia', 'Saldo Anterior', 'S A L D O', 'Rejeitado']:
         return None
       
       tipo_lancamento = linha.get('Tipo Lan�amento', '').strip()
@@ -39,6 +40,7 @@ def normalizar_linha(linha: dict) -> dict | None:
         ),
         'doc_destinatario': doc_destinatario,
         'nome_destinatario': nome_destinatario,
+        'arquivo_id': str(linha['arquivo_id']),
       }
 
     # Nubank - Formato 2
@@ -62,6 +64,7 @@ def normalizar_linha(linha: dict) -> dict | None:
         'valor': abs(valor),
         'doc_destinatario': doc,
         'nome_destinatario': nome,
+        'arquivo_id': str(linha['arquivo_id']),
       }
 
     else:
