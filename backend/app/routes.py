@@ -39,6 +39,28 @@ def receber_extrato():
   except Exception as e:
     return jsonify({"status": "erro", "mensagem": "Erro ao processar os dados"}), 400
 
+@main.route("/api/extrato/arquivos", methods=["GET"])
+def listar_arquivos():
+  try:
+    arquivos = db.session.query(
+      Extrato.arquivo_id,
+      func.count(Extrato.id).label("total_linhas")
+    ).group_by(Extrato.arquivo_id).all()
+
+    resultado = [
+      {
+        "fileName": arquivo_nome,
+        "total_linhas": total_linhas
+      }
+      for arquivo_nome, total_linhas in arquivos
+    ]
+
+    return jsonify(resultado), 200
+
+  except Exception as e:
+    print("Erro ao listar arquivos:", e)
+    return jsonify({"status": "erro", "mensagem": "Erro ao buscar arquivos"}), 500
+    
 @main.route("/api/extrato/<arquivo_id>", methods=["DELETE"])
 def deletar_extrato(arquivo_id):
   try:

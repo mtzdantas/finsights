@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CardStatus from '../components/CardStatus';
 import {FileText, CircleCheckBig, CircleX, Download, Save, Trash, FolderCheck} from 'lucide-react';
 import { useToast } from '../hooks/useToast';
@@ -10,7 +10,39 @@ export default function Import() {
   const [arquivosSalvos, setArquivosSalvos] = useState([]);
   const API_URL = import.meta.env.VITE_API_URL;
 
+  useEffect(() => {
+    const fetchArquivos = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/extrato/arquivos`);
+        if (!response.ok) throw new Error("Erro ao buscar arquivos");
+
+        const data = await response.json();
+
+        const arquivosFormatados = data.map(arq => ({
+          fileName: arq.fileName,
+          status: "ok",
+          data: Array(arq.total_linhas).fill({}),
+          headers: []
+        }));
+
+        setArquivosSalvos(arquivosFormatados);
+      } catch (err) {
+        console.error("Erro ao buscar arquivos:", err);
+      }
+    };
+
+    fetchArquivos();
+  }, [fileInfo]);
+
   const handleFileParsed = (info) => {
+    const exist = arquivosSalvos.some(
+      (arquivo) => arquivo.fileName === info.fileName
+    );
+
+    if (exist) {
+      addToast('error', "Este arquivo já foi importado anteriormente.");
+      return;
+    }
     setFileInfo(info);
   };
 
@@ -31,10 +63,6 @@ export default function Import() {
       });
 
       if (response.ok) {
-        setArquivosSalvos((prev) => [
-          ...prev,
-          { ...fileInfo, status: 'ok' }
-        ]);
         setFileInfo(null);
         addToast('success', 'Arquivo CSV salvo com sucesso!');
       } else {
@@ -150,7 +178,7 @@ export default function Import() {
                         )}
                       </div>
                       <div className="text-gray-600 text-xs">
-                        {arquivo.data.length} linha{arquivo.data.length > 1 ? 's' : ''} • {arquivo.headers.length} coluna{arquivo.headers.length > 1 ? 's' : ''}
+                        {arquivo.data.length} linha{arquivo.data.length > 1 ? 's' : ''}
                       </div>
                     </div>
 
