@@ -61,11 +61,11 @@ export default function Home() {
 
       <section id="services" className="flex flex-col bg-slate-100 px-24 h-screen text-center items-center justify-center text-[#243043]">
         <h1 className="text-5xl font-bold mb-4">Recursos que fazem a diferença</h1>
-        <p className="text-xl mb-20">
+        <p className="text-xl mb-12">
           Tudo que você precisa para uma análise financeira completa e profissional.
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
           <CardService
             titulo="Dashboards Interativos"
             descricao="Explore uma visão completa e personalizável dos seus indicadores financeiros através de gráficos dinâmicos e intuitivos. Tome decisões com base em dados visuais em tempo real."
